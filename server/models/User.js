@@ -27,13 +27,11 @@ const userSchema = new mongoose.Schema(
     aadhaar: {
       type: String,
       default: '',
-      unique: true,
       sparse: true,
     },
     pan: {
       type: String,
       default: '',
-      unique: true,
       sparse: true,
     },
     bankAccountNumber: {
@@ -72,6 +70,26 @@ const userSchema = new mongoose.Schema(
     },
   },
   { timestamps: true }
+);
+
+// Create partial unique index for aadhaar (only when not empty)
+userSchema.index(
+  { aadhaar: 1 },
+  { 
+    unique: true, 
+    sparse: true,
+    partialFilterExpression: { aadhaar: { $ne: '' } }
+  }
+);
+
+// Create partial unique index for pan (only when not empty)
+userSchema.index(
+  { pan: 1 },
+  { 
+    unique: true, 
+    sparse: true,
+    partialFilterExpression: { pan: { $ne: '' } }
+  }
 );
 
 // Hash password before saving
