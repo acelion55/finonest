@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle } from 'lucide-react';
 import Nav from "../../components/navbar";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 export default function ApprovedPage() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,11 +20,11 @@ export default function ApprovedPage() {
       let totalApps = 0;
 
       const responses = await Promise.all([
-        fetch('http://localhost:5000/api/creditcard-applications/all').catch(err => ({ ok: false })),
-        fetch('http://localhost:5000/api/personal-loan-applications/all').catch(err => ({ ok: false })),
-        fetch('http://localhost:5000/api/car-loan-applications/all').catch(err => ({ ok: false })),
-        fetch('http://localhost:5000/api/offline-applications/all').catch(err => ({ ok: false })),
-        fetch('http://localhost:5000/api/business-loan-applications/all').catch(err => ({ ok: false })),
+        fetch(`${API_URL}/api/creditcard-applications/all`).catch(err => ({ ok: false })),
+        fetch(`${API_URL}/api/personal-loan-applications/all`).catch(err => ({ ok: false })),
+        fetch(`${API_URL}/api/car-loan-applications/all`).catch(err => ({ ok: false })),
+        fetch(`${API_URL}/api/offline-applications/all`).catch(err => ({ ok: false })),
+        fetch(`${API_URL}/api/business-loan-applications/all`).catch(err => ({ ok: false })),
       ]);
 
       const typeNames = ['Credit Card', 'Personal Loan', 'Car Loan', 'Offline Loan', 'Business Loan'];

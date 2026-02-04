@@ -3,6 +3,8 @@ import { Search, MapPin, CreditCard, ChevronRight } from 'lucide-react';
 import Nav from "../../components/navbar"
 import { Link } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const CreditCardsListing = () => {
   const [searchTerm, setSearchTerm] = useState(""); 
   const [cardData, setCardData] = useState([]);

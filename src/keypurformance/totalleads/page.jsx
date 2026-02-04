@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Filter, Copy, Eye } from 'lucide-react'
 import Nav from "../../components/navbar"
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 function LeadsPage() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,11 +21,11 @@ function LeadsPage() {
 
       // Fetch all applications in parallel
       const responses = await Promise.all([
-        fetch('http://localhost:5000/api/creditcard-applications/all').catch(err => ({ ok: false, error: err })),
-        fetch('http://localhost:5000/api/personal-loan-applications/all').catch(err => ({ ok: false, error: err })),
-        fetch('http://localhost:5000/api/car-loan-applications/all').catch(err => ({ ok: false, error: err })),
-        fetch('http://localhost:5000/api/offline-applications/all').catch(err => ({ ok: false, error: err })),
-        fetch('http://localhost:5000/api/business-loan-applications/all').catch(err => ({ ok: false, error: err })),
+        fetch(`${API_URL}/api/creditcard-applications/all`).catch(err => ({ ok: false, error: err })),
+        fetch(`${API_URL}/api/personal-loan-applications/all`).catch(err => ({ ok: false, error: err })),
+        fetch(`${API_URL}/api/car-loan-applications/all`).catch(err => ({ ok: false, error: err })),
+        fetch(`${API_URL}/api/offline-applications/all`).catch(err => ({ ok: false, error: err })),
+        fetch(`${API_URL}/api/business-loan-applications/all`).catch(err => ({ ok: false, error: err })),
       ]);
 
       const allLeads = [];

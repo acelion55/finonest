@@ -3,6 +3,8 @@ import { Banknote, CheckCircle2, ShieldCheck, Mail, Phone, User, IndianRupee } f
 import { Link } from 'react-router-dom';
 import Nav from "../../components/navbar";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 export default function OfflineLoanPage() {
   const [formData, setFormData] = useState({
     fullName: '',

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Clock } from 'lucide-react';
 import Nav from "../../components/navbar";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 export default function InProgressPage() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);

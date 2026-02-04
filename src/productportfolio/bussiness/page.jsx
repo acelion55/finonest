@@ -3,6 +3,8 @@ import { Briefcase, CheckCircle2, ShieldCheck, Mail, Phone, User, IndianRupee } 
 import { Link } from 'react-router-dom';
 import Nav from "../../components/navbar";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 export default function BusinessLoanPage() {
   const [formData, setFormData] = useState({
     fullName: '',

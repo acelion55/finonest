@@ -3,6 +3,8 @@ import { Car, Search, ArrowRight } from 'lucide-react';
 import Nav from "../../components/navbar";
 import { Link } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 export default function CarLoanPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [loanData, setLoanData] = useState([]);
