@@ -121,7 +121,7 @@ const CreditCardsListing = () => {
                       ))}
                     </ul>
                      <Link to={`/productportfolio/creditcard/creditapply/${card.id}`}>
-                    <button className="w-full mt-4 bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-700 py-2 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
+                    <button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
                       Apply Now <ChevronRight size={16} />
                     </button>
                     </Link>
