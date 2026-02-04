@@ -22,12 +22,15 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors({
   origin: [
+    'https://finonest02.vercel.app',
+    'https://finonest.vercel.app',
     'http://localhost:5173',
     'http://localhost:3000',
-    process.env.FRONTEND_URL || 'http://localhost:5173',
-    'https://*.vercel.app'
-  ],
-  credentials: true
+    process.env.FRONTEND_URL
+  ].filter(Boolean),
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
