@@ -14,7 +14,7 @@ const PayoutPage = () => {
   };
   return (<>
   <Nav/>
-  <div className=\"p-3 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 bg-slate-50 min-h-screen\">
+  <div className="p-3 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 bg-slate-50 min-h-screen">
       
       {/* --- Header Section --- */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -130,7 +130,7 @@ const PayoutPage = () => {
             
             {/* Title & Icon */}
             <div className="w-full md:w-auto md:absolute md:top-4 md:left-6 flex items-center gap-2 md:gap-2">
-               <div className="bg-blue-600 p-1.5 rounded text-white flex-shrink-0">
+               <div className="bg-blue-600 p-1.5 rounded text-white shrink-0">
                  <Users size={16} />
                </div>
                <div className="text-left">

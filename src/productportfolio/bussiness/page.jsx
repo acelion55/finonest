@@ -301,7 +301,7 @@ export default function BusinessLoanPage() {
                 <button
                   type="submit"
                   disabled={loading || !formData.agreed}
-                  className={`w-full py-3 rounded-lg font-bold text-white transition-all ${
+                  className={`w-full py-3 rounded-lg font-bold   transition-all ${
                     loading || !formData.agreed
                       ? 'bg-slate-400 cursor-not-allowed'
                       : 'bg-teal-600 hover:bg-teal-700 active:scale-95'

@@ -4,11 +4,16 @@ import { User } from '../models/User.js';
 
 const router = express.Router();
 
-// Generate JWT Token
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'your_jwt_secret_key_change_in_env', {
+// Generate JWT Token with device ID
+const generateToken = (id, deviceId) => {
+  return jwt.sign({ id, deviceId }, process.env.JWT_SECRET || 'your_jwt_secret_key_change_in_env', {
     expiresIn: '30d',
   });
+};
+
+// Verify device ID from request header
+const getDeviceId = (req) => {
+  return req.headers['x-device-id'] || null;
 };
 
 // @route   POST /api/auth/signup
@@ -17,12 +22,20 @@ const generateToken = (id) => {
 router.post('/signup', async (req, res) => {
   try {
     const { email, password, confirmPassword, fullName } = req.body;
+    const deviceId = getDeviceId(req);
 
     // Validation
     if (!email || !password || !confirmPassword) {
       return res.status(400).json({
         success: false,
         message: 'Please provide email, password and confirm password',
+      });
+    }
+
+    if (!deviceId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Device identification failed',
       });
     }
 
@@ -54,12 +67,20 @@ router.post('/signup', async (req, res) => {
       email,
       password,
       fullName: fullName || '',
+      sessions: [],
     });
 
     await user.save();
 
-    // Generate token
-    const token = generateToken(user._id);
+    // Generate token with device ID
+    const token = generateToken(user._id, deviceId);
+
+    // Add session to user
+    user.sessions.push({
+      deviceId,
+      token,
+    });
+    await user.save();
 
     res.status(201).json({
       success: true,
@@ -86,12 +107,20 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
+    const deviceId = getDeviceId(req);
 
     // Validation
     if (!email || !password) {
       return res.status(400).json({
         success: false,
         message: 'Please provide email and password',
+      });
+    }
+
+    if (!deviceId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Device identification failed',
       });
     }
 
@@ -113,8 +142,16 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // Generate token
-    const token = generateToken(user._id);
+    // Generate token with device ID
+    const token = generateToken(user._id, deviceId);
+
+    // Remove old session from same device if exists, then add new session
+    user.sessions = user.sessions.filter(session => session.deviceId !== deviceId);
+    user.sessions.push({
+      deviceId,
+      token,
+    });
+    await user.save();
 
     res.status(200).json({
       success: true,
@@ -145,21 +182,43 @@ router.post('/login', async (req, res) => {
 router.get('/me', async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
+    const deviceId = getDeviceId(req);
 
-    if (!token) {
+    if (!token || !deviceId) {
       return res.status(401).json({
         success: false,
-        message: 'No token provided',
+        message: 'No token or device ID provided',
       });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret_key_change_in_env');
+    
+    // Verify device ID matches
+    if (decoded.deviceId !== deviceId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Device mismatch - unauthorized access',
+      });
+    }
+
     const user = await User.findById(decoded.id);
 
     if (!user) {
       return res.status(404).json({
         success: false,
         message: 'User not found',
+      });
+    }
+
+    // Verify session exists
+    const sessionExists = user.sessions.some(session => 
+      session.deviceId === deviceId && session.token === token
+    );
+
+    if (!sessionExists) {
+      return res.status(401).json({
+        success: false,
+        message: 'Session not found - please login again',
       });
     }
 
@@ -182,21 +241,43 @@ router.get('/me', async (req, res) => {
 router.put('/profile', async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
+    const deviceId = getDeviceId(req);
 
-    if (!token) {
+    if (!token || !deviceId) {
       return res.status(401).json({
         success: false,
-        message: 'No token provided',
+        message: 'No token or device ID provided',
       });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret_key_change_in_env');
+    
+    // Verify device ID matches
+    if (decoded.deviceId !== deviceId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Device mismatch - unauthorized access',
+      });
+    }
+
     let user = await User.findById(decoded.id);
 
     if (!user) {
       return res.status(404).json({
         success: false,
         message: 'User not found',
+      });
+    }
+
+    // Verify session exists
+    const sessionExists = user.sessions.some(session => 
+      session.deviceId === deviceId && session.token === token
+    );
+
+    if (!sessionExists) {
+      return res.status(401).json({
+        success: false,
+        message: 'Session not found - please login again',
       });
     }
 

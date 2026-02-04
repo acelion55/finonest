@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
+import { getDeviceId, clearDeviceId } from '../utils/deviceId.js';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -9,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deviceId] = useState(getDeviceId());
 
   // Load user from token on mount
   useEffect(() => {
@@ -24,6 +26,7 @@ export const AuthProvider = ({ children }) => {
       const response = await fetch(`${API_URL}/api/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
+          'X-Device-Id': deviceId,
         },
       });
 
@@ -33,11 +36,13 @@ export const AuthProvider = ({ children }) => {
       } else {
         setToken(null);
         localStorage.removeItem('token');
+        clearDeviceId();
       }
     } catch (err) {
       console.error('Failed to fetch user:', err);
       setToken(null);
       localStorage.removeItem('token');
+      clearDeviceId();
     } finally {
       setLoading(false);
     }
@@ -50,6 +55,7 @@ export const AuthProvider = ({ children }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-Device-Id': deviceId,
         },
         body: JSON.stringify({
           email,
@@ -75,7 +81,7 @@ export const AuthProvider = ({ children }) => {
       setError(message);
       return { success: false, message };
     }
-  }, []);
+  }, [deviceId]);
 
   const login = useCallback(async (email, password) => {
     setError(null);
@@ -84,6 +90,7 @@ export const AuthProvider = ({ children }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-Device-Id': deviceId,
         },
         body: JSON.stringify({ email, password }),
       });
@@ -104,13 +111,14 @@ export const AuthProvider = ({ children }) => {
       setError(message);
       return { success: false, message };
     }
-  }, []);
+  }, [deviceId]);
 
   const logout = useCallback(() => {
     setUser(null);
     setToken(null);
     setError(null);
     localStorage.removeItem('token');
+    clearDeviceId();
   }, []);
 
   const updateProfile = useCallback(
@@ -122,6 +130,7 @@ export const AuthProvider = ({ children }) => {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
+            'X-Device-Id': deviceId,
           },
           body: JSON.stringify(profileData),
         });
@@ -141,7 +150,7 @@ export const AuthProvider = ({ children }) => {
         return { success: false, message };
       }
     },
-    [token]
+    [token, deviceId]
   );
 
   const value = {

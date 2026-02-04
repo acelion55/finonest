@@ -29,7 +29,7 @@ const PartnerProgram = () => {
             className={`relative cursor-pointer rounded-2xl p-6 border-2 transition-all duration-300 ${
               selected === 'network' 
               ? 'bg-blue-50 border-blue-500 shadow-md scale-[1.02]' 
-              : 'bg-white border-slate-100 hover:border-blue-200 shadow-sm'
+              : ' border-slate-100 hover:border-blue-200 shadow-sm'
             }`}
           >
             <div className="flex items-center gap-3 mb-4">

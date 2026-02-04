@@ -1,6 +1,22 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
+const sessionSchema = new mongoose.Schema({
+  deviceId: {
+    type: String,
+    required: true,
+  },
+  token: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    expires: 30 * 24 * 60 * 60, // 30 days TTL
+  },
+});
+
 const userSchema = new mongoose.Schema(
   {
     email: {
@@ -23,6 +39,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    // Sessions - store per-device tokens
+    sessions: [sessionSchema],
     // KYC Details
     aadhaar: {
       type: String,

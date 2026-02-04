@@ -244,7 +244,7 @@ const ApplyCardPage = () => {
 
                 <button 
                   type="submit"
-                  className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 active:scale-[0.98]"
+                  className="w-full bg-blue-600   py-4 rounded-2xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 active:scale-[0.98]"
                 >
                   Submit Application
                 </button>

@@ -259,7 +259,7 @@ export default function OfflineLoanPage() {
                 <button
                   type="submit"
                   disabled={loading || !formData.agreed}
-                  className={`w-full py-3 rounded-lg font-bold text-white transition-all ${
+                  className={`w-full py-3 rounded-lg font-bold   transition-all ${
                     loading || !formData.agreed
                       ? 'bg-slate-400 cursor-not-allowed'
                       : 'bg-indigo-600 hover:bg-indigo-700 active:scale-95'

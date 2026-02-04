@@ -163,22 +163,22 @@ function LeadsPage() {
   return (
     <>
       <Nav />
-      <div className=\"min-h-screen bg-slate-50 p-3 md:p-8\">
-        <div className=\"max-w-7xl mx-auto\">
+      <div className="min-h-screen bg-slate-50 p-3 md:p-8">
+        <div className="max-w-7xl mx-auto">
           
           {/* Header */}
-          <div className=\"mb-6 md:mb-8\">
-            <h1 className=\"text-2xl md:text-4xl font-bold text-slate-800 mb-2\">Leads & Applications</h1>
-            <p className=\"text-sm md:text-base text-slate-600\">View all submitted applications across all products</p>
+          <div className="mb-6 md:mb-8">
+            <h1 className="text-2xl md:text-4xl font-bold text-slate-800 mb-2">Leads & Applications</h1>
+            <p className="text-sm md:text-base text-slate-600">View all submitted applications across all products</p>
           </div>
 
           {/* Filter Section */}
           <div className="bg-white rounded-lg shadow-sm p-3 md:p-4 mb-6 flex flex-wrap items-center gap-2 md:gap-4">
-            <Filter size={18} md:size={20} className="text-slate-600 flex-shrink-0" />
+            <Filter size={20} className="text-slate-600 shrink-0" />
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="px-3 md:px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 flex-grow md:flex-grow-0"
+              className="px-3 md:px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 grow md:grow-0"
             >
               <option value="all">All Applications</option>
               <option value="creditcard">Credit Card</option>

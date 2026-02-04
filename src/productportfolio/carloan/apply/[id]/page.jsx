@@ -303,7 +303,7 @@ const ApplyCarLoanPage = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-orange-600 text-white font-bold py-3 rounded-lg hover:bg-orange-700 transition-all shadow-lg hover:shadow-xl mt-8"
+                className="w-full bg-orange-600   font-bold py-3 rounded-lg hover:bg-orange-700 transition-all shadow-lg hover:shadow-xl mt-8"
               >
                 Submit Application
               </button>
