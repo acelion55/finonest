@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ArrowLeft, CheckCircle2, ShieldCheck, Mail, Phone, User } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import Nav from "./nav";
+import { AuthContext } from "../../../../context/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const ApplyCardPage = () => {
+  const { token } = useContext(AuthContext);
   const params = useParams();
   const cardId = params.id;
 
@@ -63,6 +65,7 @@ const ApplyCardPage = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           cardId: card.id,

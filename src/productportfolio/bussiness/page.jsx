@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Briefcase, CheckCircle2, ShieldCheck, Mail, Phone, User, IndianRupee } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Nav from "../../components/navbar";
+import { AuthContext } from "../../context/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function BusinessLoanPage() {
+  const { token } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     fullName: '',
     mobileNumber: '',
@@ -47,6 +49,7 @@ export default function BusinessLoanPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });
