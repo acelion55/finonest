@@ -163,22 +163,22 @@ function LeadsPage() {
   return (
     <>
       <Nav />
-      <div className="min-h-screen bg-slate-50 p-4 md:p-8">
-        <div className="max-w-7xl mx-auto">
+      <div className=\"min-h-screen bg-slate-50 p-3 md:p-8\">
+        <div className=\"max-w-7xl mx-auto\">
           
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-slate-800 mb-2">Leads & Applications</h1>
-            <p className="text-slate-600">View all submitted applications across all products</p>
+          <div className=\"mb-6 md:mb-8\">
+            <h1 className=\"text-2xl md:text-4xl font-bold text-slate-800 mb-2\">Leads & Applications</h1>
+            <p className=\"text-sm md:text-base text-slate-600\">View all submitted applications across all products</p>
           </div>
 
           {/* Filter Section */}
-          <div className="bg-white rounded-lg shadow-sm p-4 mb-6 flex items-center gap-4 flex-wrap">
-            <Filter size={20} className="text-slate-600" />
+          <div className="bg-white rounded-lg shadow-sm p-3 md:p-4 mb-6 flex flex-wrap items-center gap-2 md:gap-4">
+            <Filter size={18} md:size={20} className="text-slate-600 flex-shrink-0" />
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 md:px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 flex-grow md:flex-grow-0"
             >
               <option value="all">All Applications</option>
               <option value="creditcard">Credit Card</option>
@@ -187,8 +187,8 @@ function LeadsPage() {
               <option value="offline">Offline Loan</option>
               <option value="business">Business Loan</option>
             </select>
-            <span className="text-sm text-slate-600 ml-auto">
-              Total: <span className="font-semibold">{filteredLeads.length}</span> leads
+            <span className="text-xs md:text-sm text-slate-600 ml-auto md:ml-0">
+              Total: <span className="font-semibold">{filteredLeads.length}</span>
             </span>
           </div>
 
@@ -209,55 +209,53 @@ function LeadsPage() {
           {/* Table */}
           {!loading && !error && (
             <div className="bg-white rounded-lg shadow overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-slate-50 border-b border-slate-200">
+              <table className="w-full text-xs md:text-sm">
+                <thead className="bg-slate-50 border-b border-slate-200 sticky top-0">
                   <tr>
-                    <th className="px-6 py-3 text-left font-semibold text-slate-700">Lead ID</th>
-                    <th className="px-6 py-3 text-left font-semibold text-slate-700">Date/Time</th>
-                    <th className="px-6 py-3 text-left font-semibold text-slate-700">Name</th>
-                    <th className="px-6 py-3 text-left font-semibold text-slate-700">Phone</th>
-                    <th className="px-6 py-3 text-left font-semibold text-slate-700">Type</th>
-                    <th className="px-6 py-3 text-left font-semibold text-slate-700">Product</th>
-                    <th className="px-6 py-3 text-left font-semibold text-slate-700">Bank</th>
-                    <th className="px-6 py-3 text-left font-semibold text-slate-700">Advisor</th>
-                    <th className="px-6 py-3 text-left font-semibold text-slate-700">Status</th>
-                    <th className="px-6 py-3 text-left font-semibold text-slate-700">Actions</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-slate-700 whitespace-nowrap">Lead ID</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-slate-700 whitespace-nowrap">Date</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-slate-700 whitespace-nowrap">Name</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-slate-700 whitespace-nowrap hidden sm:table-cell">Phone</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-slate-700 whitespace-nowrap">Type</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-slate-700 whitespace-nowrap hidden md:table-cell">Product</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-slate-700 whitespace-nowrap hidden lg:table-cell">Bank</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-slate-700 whitespace-nowrap">Status</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-slate-700 whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredLeads.length > 0 ? (
                     filteredLeads.map((lead, index) => (
                       <tr key={index} className="border-b border-slate-200 hover:bg-slate-50 transition-colors">
-                        <td className="px-6 py-4 text-slate-700 font-mono text-xs">{lead._id?.substring(0, 8) || 'N/A'}</td>
-                        <td className="px-6 py-4 text-slate-700 whitespace-nowrap text-xs">{formatDate(lead.createdAt)}</td>
-                        <td className="px-6 py-4 text-slate-800 font-medium">{lead.fullName}</td>
-                        <td className="px-6 py-4 text-slate-700">{lead.mobileNumber}</td>
-                        <td className="px-6 py-4">
-                          <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
-                            {lead.type}
+                        <td className="px-3 md:px-6 py-3 text-slate-700 font-mono text-xs">{lead._id?.substring(0, 8) || 'N/A'}</td>
+                        <td className="px-3 md:px-6 py-3 text-slate-700 whitespace-nowrap text-xs">{formatDate(lead.createdAt).split(',')[0]}</td>
+                        <td className="px-3 md:px-6 py-3 text-slate-800 font-medium text-xs md:text-sm">{lead.fullName}</td>
+                        <td className="px-3 md:px-6 py-3 text-slate-700 text-xs hidden sm:table-cell">{lead.mobileNumber}</td>
+                        <td className="px-3 md:px-6 py-3">
+                          <span className="px-2 md:px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
+                            {lead.type.split(' ')[0]}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-slate-700 text-sm">{lead.product}</td>
-                        <td className="px-6 py-4 text-slate-700 text-sm">{lead.bank}</td>
-                        <td className="px-6 py-4 text-slate-700 text-sm">harsh vardhan</td>
-                        <td className="px-6 py-4">
-                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(lead.status || 'pending')}`}>
+                        <td className="px-3 md:px-6 py-3 text-slate-700 text-xs hidden md:table-cell">{lead.product}</td>
+                        <td className="px-3 md:px-6 py-3 text-slate-700 text-xs hidden lg:table-cell">{lead.bank}</td>
+                        <td className="px-3 md:px-6 py-3">
+                          <span className={`px-2 md:px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(lead.status || 'pending')}`}>
                             {(lead.status || 'pending').charAt(0).toUpperCase() + (lead.status || 'pending').slice(1)}
                           </span>
                         </td>
-                        <td className="px-6 py-4">
-                          <div className="flex gap-2">
+                        <td className="px-3 md:px-6 py-3">
+                          <div className="flex gap-1 md:gap-2 flex-wrap">
                             <button
                               onClick={() => alert(`History for ${lead.fullName}`)}
-                              className="px-3 py-1 bg-blue-600 text-white rounded text-xs font-semibold hover:bg-blue-700 transition-colors"
+                              className="px-2 md:px-3 py-1 bg-blue-600 text-white rounded text-xs font-semibold hover:bg-blue-700 transition-colors whitespace-nowrap"
                             >
                               History
                             </button>
                             <button
                               onClick={() => handleCopyURL(lead._id)}
-                              className="px-3 py-1 bg-green-600 text-white rounded text-xs font-semibold hover:bg-green-700 transition-colors flex items-center gap-1"
+                              className="px-2 md:px-3 py-1 bg-green-600 text-white rounded text-xs font-semibold hover:bg-green-700 transition-colors flex items-center gap-0.5 md:gap-1 whitespace-nowrap"
                             >
-                              <Copy size={14} /> Copy
+                              <Copy size={12} /> Copy
                             </button>
                           </div>
                         </td>
@@ -265,7 +263,7 @@ function LeadsPage() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="10" className="px-6 py-8 text-center text-slate-500">
+                      <td colSpan="9" className="px-6 py-8 text-center text-slate-500">
                         No leads found
                       </td>
                     </tr>
