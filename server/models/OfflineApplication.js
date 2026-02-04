@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
 const offlineApplicationSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
   fullName: {
     type: String,
     required: true,

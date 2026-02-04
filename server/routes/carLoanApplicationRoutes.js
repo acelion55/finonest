@@ -1,5 +1,6 @@
 import express from 'express';
 import { CarLoanApplication } from '../models/CarLoanApplication.js';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -20,8 +21,25 @@ router.get('/all', async (req, res) => {
   }
 });
 
-// Create new application
-router.post('/apply', async (req, res) => {
+// Get user's applications (protected)
+router.get('/my-applications', authenticateToken, async (req, res) => {
+  try {
+    const applications = await CarLoanApplication.find({ userId: req.userId }).sort({ appliedAt: -1 });
+    res.status(200).json({
+      success: true,
+      data: applications,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching applications',
+      error: error.message,
+    });
+  }
+});
+
+// Create new application (protected)
+router.post('/apply', authenticateToken, async (req, res) => {
   try {
     const { loanId, loanName, bank, fullName, mobileNumber, email, loanAmount, carType } = req.body;
 
@@ -33,6 +51,7 @@ router.post('/apply', async (req, res) => {
     }
 
     const newApplication = new CarLoanApplication({
+      userId: req.userId,
       loanId,
       loanName,
       bank,

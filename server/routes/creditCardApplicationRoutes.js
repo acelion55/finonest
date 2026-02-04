@@ -1,12 +1,30 @@
 import express from 'express';
 import { CreditCardApplication } from '../models/CreditCardApplication.js';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Get all applications
+// Get all applications (admin only)
 router.get('/all', async (req, res) => {
   try {
     const applications = await CreditCardApplication.find().sort({ appliedAt: -1 });
+    res.status(200).json({
+      success: true,
+      data: applications,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching applications',
+      error: error.message,
+    });
+  }
+});
+
+// Get user's applications (protected)
+router.get('/my-applications', authenticateToken, async (req, res) => {
+  try {
+    const applications = await CreditCardApplication.find({ userId: req.userId }).sort({ appliedAt: -1 });
     res.status(200).json({
       success: true,
       data: applications,
@@ -37,8 +55,8 @@ router.get('/card/:cardId', async (req, res) => {
   }
 });
 
-// Create new application
-router.post('/apply', async (req, res) => {
+// Create new application (protected)
+router.post('/apply', authenticateToken, async (req, res) => {
   try {
     const { cardId, cardName, bank, fullName, mobileNumber, email } = req.body;
 
@@ -50,6 +68,7 @@ router.post('/apply', async (req, res) => {
     }
 
     const newApplication = new CreditCardApplication({
+      userId: req.userId,
       cardId,
       cardName,
       bank,

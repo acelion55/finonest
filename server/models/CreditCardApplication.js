@@ -3,6 +3,11 @@ import mongoose from 'mongoose';
 // Credit Card Application Schema
 const creditCardApplicationSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     cardId: {
       type: Number,
       required: true,

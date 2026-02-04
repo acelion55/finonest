@@ -1,5 +1,6 @@
 import express from 'express';
 import { OfflineApplication } from '../models/OfflineApplication.js';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -7,6 +8,23 @@ const router = express.Router();
 router.get('/all', async (req, res) => {
   try {
     const applications = await OfflineApplication.find();
+    res.status(200).json({
+      success: true,
+      data: applications,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching applications',
+      error: error.message,
+    });
+  }
+});
+
+// Get user's offline applications (protected)
+router.get('/my-applications', authenticateToken, async (req, res) => {
+  try {
+    const applications = await OfflineApplication.find({ userId: req.userId });
     res.status(200).json({
       success: true,
       data: applications,
@@ -43,8 +61,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Create new offline application
-router.post('/create', async (req, res) => {
+// Create new offline application (protected)
+router.post('/create', authenticateToken, async (req, res) => {
   try {
     const { fullName, mobileNumber, email, loanAmount, monthlyIncome, employmentType, loanPurpose, agreed } = req.body;
 
@@ -57,6 +75,7 @@ router.post('/create', async (req, res) => {
     }
 
     const newApplication = new OfflineApplication({
+      userId: req.userId,
       fullName,
       mobileNumber,
       email,

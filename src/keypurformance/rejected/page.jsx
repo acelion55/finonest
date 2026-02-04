@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { XCircle } from 'lucide-react';
 import Nav from "../../components/navbar";
+import { AuthContext } from "../../context/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function RejectedPage() {
+  const { token } = useContext(AuthContext);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ total: 0, thisMonth: 0, rate: 0 });
 
   useEffect(() => {
-    fetchRejectedApplications();
-  }, []);
+    if (token) {
+      fetchRejectedApplications();
+    }
+  }, [token]);
 
   const fetchRejectedApplications = async () => {
     try {
@@ -20,11 +24,21 @@ export default function RejectedPage() {
       let totalApps = 0;
 
       const responses = await Promise.all([
-        fetch(`${API_URL}/api/creditcard-applications/all`).catch(err => ({ ok: false })),
-        fetch(`${API_URL}/api/personal-loan-applications/all`).catch(err => ({ ok: false })),
-        fetch(`${API_URL}/api/car-loan-applications/all`).catch(err => ({ ok: false })),
-        fetch(`${API_URL}/api/offline-applications/all`).catch(err => ({ ok: false })),
-        fetch(`${API_URL}/api/business-loan-applications/all`).catch(err => ({ ok: false })),
+        fetch(`${API_URL}/api/creditcard-applications/my-applications`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }).catch(err => ({ ok: false })),
+        fetch(`${API_URL}/api/personal-loan-applications/my-applications`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }).catch(err => ({ ok: false })),
+        fetch(`${API_URL}/api/car-loan-applications/my-applications`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }).catch(err => ({ ok: false })),
+        fetch(`${API_URL}/api/offline-applications/my-applications`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }).catch(err => ({ ok: false })),
+        fetch(`${API_URL}/api/business-loan-applications/my-applications`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }).catch(err => ({ ok: false })),
       ]);
 
       const typeNames = ['Credit Card', 'Personal Loan', 'Car Loan', 'Offline Loan', 'Business Loan'];

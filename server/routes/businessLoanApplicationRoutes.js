@@ -1,5 +1,6 @@
 import express from 'express';
 import { BusinessLoanApplication } from '../models/BusinessLoanApplication.js';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -7,6 +8,23 @@ const router = express.Router();
 router.get('/all', async (req, res) => {
   try {
     const applications = await BusinessLoanApplication.find();
+    res.status(200).json({
+      success: true,
+      data: applications,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching applications',
+      error: error.message,
+    });
+  }
+});
+
+// Get user's business loan applications (protected)
+router.get('/my-applications', authenticateToken, async (req, res) => {
+  try {
+    const applications = await BusinessLoanApplication.find({ userId: req.userId });
     res.status(200).json({
       success: true,
       data: applications,
@@ -43,8 +61,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Create new business loan application
-router.post('/create', async (req, res) => {
+// Create new business loan application (protected)
+router.post('/create', authenticateToken, async (req, res) => {
   try {
     const { fullName, mobileNumber, email, businessName, loanAmount, businessType, annualRevenue, businessAge, loanPurpose, agreed } = req.body;
 
@@ -57,6 +75,7 @@ router.post('/create', async (req, res) => {
     }
 
     const newApplication = new BusinessLoanApplication({
+      userId: req.userId,
       fullName,
       mobileNumber,
       email,

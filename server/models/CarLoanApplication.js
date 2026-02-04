@@ -3,6 +3,11 @@ import mongoose from 'mongoose';
 // Car Loan Application Schema
 const carLoanApplicationSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     loanId: {
       type: Number,
       required: true,
