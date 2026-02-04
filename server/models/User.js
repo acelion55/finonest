@@ -77,8 +77,7 @@ userSchema.index(
   { aadhaar: 1 },
   { 
     unique: true, 
-    sparse: true,
-    partialFilterExpression: { aadhaar: { $ne: '' } }
+    partialFilterExpression: { aadhaar: { $type: 'string', $gt: '' } }
   }
 );
 
@@ -87,8 +86,7 @@ userSchema.index(
   { pan: 1 },
   { 
     unique: true, 
-    sparse: true,
-    partialFilterExpression: { pan: { $ne: '' } }
+    partialFilterExpression: { pan: { $type: 'string', $gt: '' } }
   }
 );
 

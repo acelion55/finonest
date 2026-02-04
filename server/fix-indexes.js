@@ -32,8 +32,7 @@ async function fixIndexes() {
       { aadhaar: 1 },
       { 
         unique: true, 
-        sparse: true,
-        partialFilterExpression: { aadhaar: { $ne: '' } }
+        partialFilterExpression: { aadhaar: { $type: 'string', $gt: '' } }
       }
     );
     console.log('✅ Created new partial unique index for aadhaar');
@@ -42,8 +41,7 @@ async function fixIndexes() {
       { pan: 1 },
       { 
         unique: true, 
-        sparse: true,
-        partialFilterExpression: { pan: { $ne: '' } }
+        partialFilterExpression: { pan: { $type: 'string', $gt: '' } }
       }
     );
     console.log('✅ Created new partial unique index for pan');
