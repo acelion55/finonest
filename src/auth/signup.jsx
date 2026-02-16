@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, User, AlertCircle, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, AlertCircle, CheckCircle, Phone } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 
 const Signup = () => {
@@ -10,6 +10,7 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    phoneNumber: '',
     password: '',
     confirmPassword: '',
   });
@@ -18,6 +19,10 @@ const Signup = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [generatedOtp, setGeneratedOtp] = useState('');
+  const [otpVerified, setOtpVerified] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,6 +30,45 @@ const Signup = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const sendOtp = async () => {
+    if (!formData.phoneNumber || formData.phoneNumber.length !== 10) {
+      setMessage({ type: 'error', text: 'Please enter a valid 10-digit phone number' });
+      return;
+    }
+
+    setLoading(true);
+    const otpCode = Math.floor(1000 + Math.random() * 9000).toString();
+    setGeneratedOtp(otpCode);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber: formData.phoneNumber, otp: otpCode }),
+      });
+      
+      const data = await response.json();
+      if (data.success) {
+        setOtpSent(true);
+        setMessage({ type: 'success', text: 'OTP sent successfully!' });
+      } else {
+        setMessage({ type: 'error', text: 'Failed to send OTP. Please try again.' });
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Failed to send OTP. Please try again.' });
+    }
+    setLoading(false);
+  };
+
+  const verifyOtp = () => {
+    if (otp === generatedOtp) {
+      setOtpVerified(true);
+      setMessage({ type: 'success', text: 'Phone number verified!' });
+    } else {
+      setMessage({ type: 'error', text: 'Invalid OTP. Please try again.' });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -39,6 +83,11 @@ const Signup = () => {
 
     if (!formData.email.includes('@')) {
       setMessage({ type: 'error', text: 'Please enter a valid email' });
+      return;
+    }
+
+    if (!otpVerified) {
+      setMessage({ type: 'error', text: 'Please verify your phone number' });
       return;
     }
 
@@ -57,7 +106,8 @@ const Signup = () => {
       formData.email,
       formData.password,
       formData.confirmPassword,
-      formData.fullName
+      formData.fullName,
+      formData.phoneNumber
     );
 
     if (result.success) {
@@ -140,6 +190,68 @@ const Signup = () => {
               />
             </div>
           </div>
+
+          {/* Phone Number */}
+          <div>
+            <label htmlFor="phoneNumber" className="block text-sm font-semibold text-slate-700 mb-2">
+              Phone Number
+            </label>
+            <div className="flex gap-2">
+              <div className="flex items-center border border-slate-300 rounded-lg flex-1">
+                <Phone className="text-slate-400 ml-3" size={20} />
+                <input
+                  type="tel"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  placeholder="10-digit number"
+                  maxLength="10"
+                  className="w-full px-4 py-2 outline-none"
+                  disabled={loading || otpVerified}
+                />
+              </div>
+              {!otpVerified && (
+                <button
+                  type="button"
+                  onClick={sendOtp}
+                  disabled={loading || !formData.phoneNumber}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
+                >
+                  {otpSent ? 'Resend' : 'Send OTP'}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* OTP Verification */}
+          {otpSent && !otpVerified && (
+            <div>
+              <label htmlFor="otp" className="block text-sm font-semibold text-slate-700 mb-2">
+                Enter OTP
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  id="otp"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  placeholder="Enter 4-digit OTP"
+                  maxLength="4"
+                  className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  disabled={loading}
+                />
+                <button
+                  type="button"
+                  onClick={verifyOtp}
+                  disabled={loading || otp.length !== 4}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Password */}
           <div>

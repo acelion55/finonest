@@ -1,0 +1,357 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+} */
+
+/* Root container for the page */
+/* .auth-page-root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #1a1a2e;
+    padding: 15px;
+    overflow: hidden;
+} */
+
+.top-logo {
+    width: 30vw;
+    height: 50vh;
+    margin-top: -10vh;
+    margin-left: -5vh;
+    z-index: 99;
+    position: absolute;
+    object-fit: contain;
+    filter: drop-shadow(0 0 20px rgba(0, 190, 216, 0.5));
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+
+.auth-wrapper {
+    position: relative;
+    width: 100vw;
+    min-height: 500px; 
+    height: 100vh;
+    border: 2px solid #00BED8;
+    box-shadow: 0 0 25px rgba(0, 190, 216, 0.3);
+    overflow: hidden;
+    background: linear-gradient(135deg, #007b91 0%, #ffffff 50%, #00BED8 100%);
+    display: flex;
+    transition: all 0.5s ease-in-out; 
+}
+
+
+
+.auth-wrapper .credentials-panel {
+    position: relative; 
+    width: 50%;
+    padding: 40px; 
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
+/* Panels */
+.credentials-panel.signin {
+    left: 0;
+    padding: 30vh 5vw;
+}
+
+.credentials-panel.signup {
+    right: 0;
+    padding: 15vh 5vw;
+}
+.slide-element.head{
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* Message Banners (Errors/Success) */
+.message-banner {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 8vh;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+}
+.message-banner.error { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+.message-banner.success { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Input Fields */
+.credentials-panel .field-wrapper {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin-top: 25px;
+}
+
+.field-wrapper input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: #1a1a2e;
+    background-color: rgba(255, 255, 255, 0);
+    font-weight: 600;
+    border-bottom: 2px solid #1a1a2e;
+    padding-right: 30px; /* Space for Lucide icon */
+    transition: .5s;
+}
+
+.field-wrapper input:focus,
+.field-wrapper input:valid {
+    border-bottom: 2px solid #00BED8;
+    
+}
+
+.field-wrapper label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #1a1a2e;
+    
+    pointer-events: none;
+    transition: .5s;
+}
+
+.field-wrapper input:focus~label,
+.field-wrapper input:valid~label,
+.field-wrapper input:disabled~label{
+    top: -5px;
+    color: #00BED8;
+    font-size: 12px;
+}
+
+
+/* Lucide Icon Styling */
+.field-icon {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    color: #1a1a2e;
+    transition: .5s;
+}
+
+.field-wrapper input:focus~.field-icon,
+.field-wrapper input:valid~.field-icon {
+    color: #00BED8;
+    
+}
+
+/* Buttons */
+.submit-button {
+    position: relative;
+    width: 100%;
+    height: 45px;
+    background: linear-gradient(135deg, #00BED8, #00A3BD);
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    border: 2px solid #00BED8;
+    overflow: hidden;
+    z-index: 1;
+    color: #fff;
+    margin-top: 10px;
+}
+
+.field-wrapper input:disabled {
+    cursor: not-allowed;
+    color: #1a1a2e !important;
+    opacity: 0.8;
+    background: red !important;
+    padding-top: 2vh;
+    padding-bottom : 2vh;
+    -webkit-text-fill-color: #1a1a2e !important;
+}
+
+.submit-button:disabled {
+    filter: grayscale(1);
+    cursor: not-allowed;
+}
+
+
+.phone:disabled::placeholder {
+    color: red !important;
+    opacity: 0;
+}
+
+.submit-button::before {
+    content: "";
+    position: absolute;
+    height: 300%;
+    width: 100%;
+    background: linear-gradient(#00A3BD, #00BED8);
+    top: -100%;
+    left: 0;
+    z-index: -1;
+    transition: .5s;
+}
+
+.submit-button:hover:before {
+    top: 0;
+}
+
+.switch-link {
+    font-size: 14px;
+    text-align: center;
+    margin: 20px 0 10px;
+    color: #1a1a2e;
+}
+
+.switch-link a {
+    text-decoration: none;
+    color: #00BED8;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Welcome Sections */
+.welcome-section {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 5;
+}
+
+.welcome-section.signin {
+    right: 0;
+    text-align: right;
+    padding: 0 40px 60px 150px;
+}
+
+.welcome-section.signup {
+    left: 0;
+    text-align: left;
+    padding: 0 150px 60px 38px;
+    pointer-events: none;
+}
+
+/* --- ANIMATION LOGIC (Toggled) --- */
+
+/* Background Shapes */
+.auth-wrapper .background-shape {
+    position: absolute;
+    margin-left: -110vw;
+    top: -50vh;
+    height: 180vh;
+    width: 150vw; 
+    background: linear-gradient(0deg, rgba(0, 123, 145, 0.15), rgba(0, 190, 216, 0.25));
+    transform: rotate(110deg) skewY(0deg);
+    transform-origin: bottom right;
+    transition: 1.5s ease;
+}
+
+.auth-wrapper.toggled .background-shape {
+    transform: rotate(180deg) skewY(0deg);
+    transition-delay: 0.3s;
+}
+
+.auth-wrapper .secondary-shape {
+    position: absolute;
+    left: -65vw;
+    top: 60vh;
+    height: 250vh;
+    background: linear-gradient(135deg, rgba(0, 123, 145, 0.15), rgba(0, 190, 216, 0.25));
+    width: 150vw; 
+    border-right: 3px solid #00BED8;
+    transform: rotate(45deg) skewY(0deg);
+    transform-origin: bottom left;
+    transition: 1.5s ease; 
+}
+
+.auth-wrapper.toggled .secondary-shape {
+    transform: rotate(-16deg);
+    transition-delay: 0.3s;
+}
+
+/* Slide Elements Transitions */
+.slide-element {
+    transition: 1.5s ease;
+}
+
+.slide-element.wel {
+      font-weight: 800;
+      font-size: 3rem;
+      line-height: 1;
+}
+
+/* Sign In Panel Exit */
+.auth-wrapper.toggled .credentials-panel.signin .slide-element {
+    transform: translateX(-120%);
+    opacity: 0;
+}
+
+/* Sign Up Panel Entrance */
+.credentials-panel.signup .slide-element {
+    transform: translateX(120%);
+    opacity: 0;
+    filter: blur(10px);
+}
+
+.auth-wrapper.toggled .credentials-panel.signup .slide-element {
+    transform: translateX(0%);
+    opacity: 1;
+    filter: blur(0px);
+}
+
+/* Welcome Entrance/Exit */
+.auth-wrapper.toggled .welcome-section.signin .slide-element {
+    transform: translateX(120%);
+    opacity: 0;
+}
+
+.welcome-section.signup .slide-element {
+    transform: translateX(-120%);
+    opacity: 0;
+}
+
+.auth-wrapper.toggled .welcome-section.signup .slide-element {
+    transform: translateX(0%);
+    opacity: 1;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .auth-wrapper { height: auto; min-height: 550px; }
+    .auth-wrapper .credentials-panel { width: 100%; position: relative; }
+    .welcome-section, .background-shape, .secondary-shape { display: none; }
+    
+    .credentials-panel.signin { display: flex; }
+    .credentials-panel.signup { display: none; }
+    
+    .auth-wrapper.toggled .credentials-panel.signin { display: none; }
+    .auth-wrapper.toggled .credentials-panel.signup { display: flex; }
+    
+    .credentials-panel.signup .slide-element { transform: translateX(0); opacity: 1; filter: none; }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    /* This makes the background transparent by using a long transition */
+    transition: background-color 5000s ease-in-out 0s;
+    /* This keeps your text color dark/navy as per your design */
+    -webkit-text-fill-color: #1a1a2e !important;
+    /* Optional: if you want the font to stay consistent */
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 600 !important;
+}

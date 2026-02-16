@@ -4,6 +4,38 @@ import { User } from '../models/User.js';
 
 const router = express.Router();
 
+// @route   POST /api/auth/send-otp
+// @desc    Send OTP to phone number
+// @access  Public
+router.post('/send-otp', async (req, res) => {
+  try {
+    const { phoneNumber, otp } = req.body;
+
+    if (!phoneNumber || !otp) {
+      return res.status(400).json({
+        success: false,
+        message: 'Phone number and OTP are required',
+      });
+    }
+
+    const template = `Hi! ${otp} is your OTP to log in to Finonest Pro. The code is valid for just 3 mins. -Team Finonest`;
+    const url = `https://m1.sarv.com/api/v2.0/sms_campaign.php?token=1507603797696c62b571b953.18331010&user_id=50962153&route=OT&template_id=16212&sender_id=FINOST&language=EN&template=${encodeURIComponent(template)}&contact_numbers=${phoneNumber}`;
+    
+    const response = await fetch(url);
+    
+    res.status(200).json({
+      success: true,
+      message: 'OTP sent successfully',
+    });
+  } catch (error) {
+    console.error('Send OTP error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to send OTP',
+    });
+  }
+});
+
 // Generate JWT Token with device ID
 const generateToken = (id, deviceId) => {
   return jwt.sign({ id, deviceId }, process.env.JWT_SECRET || 'your_jwt_secret_key_change_in_env', {
@@ -21,7 +53,7 @@ const getDeviceId = (req) => {
 // @access  Public
 router.post('/signup', async (req, res) => {
   try {
-    const { email, password, confirmPassword, fullName } = req.body;
+    const { email, password, confirmPassword, fullName, phoneNumber } = req.body;
     const deviceId = getDeviceId(req);
 
     // Validation
@@ -67,6 +99,7 @@ router.post('/signup', async (req, res) => {
       email,
       password,
       fullName: fullName || '',
+      phone: phoneNumber || '',
       sessions: [],
     });
 
@@ -113,7 +146,7 @@ router.post('/login', async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide email and password',
+        message: 'Please provide email/phone and password',
       });
     }
 
@@ -124,8 +157,11 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // Check for user
-    const user = await User.findOne({ email });
+    // Check for user by email or phone
+    const user = await User.findOne({ 
+      $or: [{ email }, { phone: email }] 
+    });
+    
     if (!user) {
       return res.status(401).json({
         success: false,

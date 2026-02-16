@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signup = useCallback(async (email, password, confirmPassword, fullName) => {
+  const signup = useCallback(async (email, password, confirmPassword, fullName, phoneNumber) => {
     setError(null);
     try {
       const response = await fetch(`${API_URL}/api/auth/signup`, {
@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }) => {
           password,
           confirmPassword,
           fullName,
+          phoneNumber,
         }),
       });
 
