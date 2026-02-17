@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Login & Signup Form</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
@@ -18,15 +20,15 @@
         <div class="secondary-shape"></div>
         <div class="credentials-panel signin">
             <h2 class="slide-element">Login</h2>
-            <form action="#">
+            <form action="#" autocomplete="off">
                 <div class="field-wrapper slide-element">
-                    <input type="text" required>
+                    <input type="text" required autocomplete="username">
                     <label for="">Username</label>
                     <i class="fa-solid fa-user"></i>
                 </div>
 
                 <div class="field-wrapper slide-element">
-                    <input type="password" required>
+                    <input type="password" required autocomplete="current-password">
                     <label for="">Password</label>
                     <i class="fa-solid fa-lock"></i>
                 </div>
@@ -47,27 +49,27 @@
 
         <div class="credentials-panel signup">
             <h2 class="slide-element">Register</h2>
-            <form action="#">
+            <form action="#" autocomplete="off">
                 <div class="field-wrapper slide-element" >
-                    <input type="text" required>
+                    <input type="text" required autocomplete="username">
                     <label for="">Username</label>
                     <i class="fa-solid fa-user"></i>
                 </div>
 
                 <div class="field-wrapper slide-element">
-                    <input type="email" required>
+                    <input type="email" required autocomplete="email">
                     <label for="">Email</label>
                     <i class="fa-solid fa-envelope"></i>
                 </div>
 
                 <div class="field-wrapper slide-element">
-                    <input type="email" required>
-                    <label for="">Email</label>
+                    <input type="email" required autocomplete="email">
+                    <label for="">Confirm Email</label>
                     <i class="fa-solid fa-envelope"></i>
                 </div>
 
                 <div class="field-wrapper slide-element">
-                    <input type="password" required>
+                    <input type="password" required autocomplete="new-password">
                     <label for="">Password</label>
                     <i class="fa-solid fa-lock"></i>
                 </div>
@@ -87,8 +89,6 @@
         </div>
 
     </div>
-
-
 
     <script src="style.js"></script>
 </body>

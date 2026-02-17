@@ -1,3 +1,52 @@
+// Mobile optimization
+document.addEventListener('touchmove', function(event) {
+    if (event.target.closest('input')) {
+        return; // Allow scrolling on inputs
+    }
+}, { passive: true });
+
+// Prevent zoom on double tap for form elements
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function(event) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, { passive: false });
+
+// Prevent pinch zoom
+document.addEventListener('touchmove', function(event) {
+    if (event.touches.length > 1) {
+        event.preventDefault();
+    }
+}, { passive: false });
+
+// Set viewport scale on load
+function setViewportScale() {
+    const viewport = document.querySelector('meta[name="viewport"]');
+    if (viewport) {
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no');
+    }
+}
+setViewportScale();
+
+// Improve input focus for mobile
+const inputs = document.querySelectorAll('input');
+inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+        // Scroll into view with padding
+        setTimeout(() => {
+            this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+    });
+
+    // Better input styling on mobile
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        input.style.fontSize = '16px'; // Prevents zoom on iOS
+    }
+});
+
 const authWrapper = document.querySelector('.auth-wrapper');
 const loginTrigger = document.querySelector('.login-trigger');
 const registerTrigger = document.querySelector('.register-trigger');
@@ -15,12 +64,20 @@ let otpVerified = false;
 registerTrigger.addEventListener('click', (e) => {
     e.preventDefault();
     authWrapper.classList.add('toggled');
+    // Scroll to top on mobile
+    if (window.innerWidth <= 768) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 });
 
 loginTrigger.addEventListener('click', (e) => {
     e.preventDefault();
     authWrapper.classList.remove('toggled');
     resetSignup();
+    // Scroll to top on mobile
+    if (window.innerWidth <= 768) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 });
 
 if (sendOtpBtn) {

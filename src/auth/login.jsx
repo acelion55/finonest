@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, AlertCircle, CheckCircle, Phone } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
@@ -31,6 +31,60 @@ const AuthPage = () => {
   const [signupGeneratedOtp, setSignupGeneratedOtp] = useState('');
   const [signupOtpVerified, setSignupOtpVerified] = useState(false);
 
+  // Mobile Optimization Effects
+  useEffect(() => {
+    // Prevent pinch-to-zoom
+    const handleTouchMove = (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    };
+
+    // Prevent double-tap zoom
+    let lastTouchEnd = 0;
+    const handleTouchEnd = (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+      lastTouchEnd = now;
+    };
+
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+    // Fix input focus for mobile
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        // Scroll into view with delay to ensure keyboard is open on mobile
+        setTimeout(() => {
+          this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+      });
+
+      // Prevent zoom on iOS by setting font size to 16px
+      if (/iPhone|iPad|iPod|Android/.test(navigator.userAgent)) {
+        input.style.fontSize = '16px';
+      }
+    });
+
+    return () => {
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+      inputs.forEach(input => {
+        input.removeEventListener('focus', null);
+      });
+    };
+  }, []);
+
+  // Scroll to top when toggling forms on mobile
+  useEffect(() => {
+    if (window.innerWidth <= 768) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [isToggled]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -43,6 +97,9 @@ const AuthPage = () => {
     setOtpSent(false);
     setOtp('');
     setOtpVerified(false);
+    setSignupOtpSent(false);
+    setSignupOtp('');
+    setSignupOtpVerified(false);
   };
 
   const sendLoginOtp = async () => {

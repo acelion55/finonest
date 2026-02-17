@@ -68,7 +68,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    // Verification Status
     kycStatus: {
       type: String,
       enum: ['pending', 'verified', 'rejected'],
